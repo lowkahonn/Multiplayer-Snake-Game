@@ -36,7 +36,7 @@ class Snake:
             self.head = self.body[0]
             if self.direction != (0,0):
                 x, y = self.direction
-                new = (self.head[0] + x * GRID, self.head[1] + y * GRID)
+                new = ((self.head[0] + x * GRID) % SIZE[0], (self.head[1] + y * GRID) % SIZE[1])
                 if len(self.body) > 2 and new in self.body[2:]:
                     self.check_alive = False
                 else:
@@ -55,17 +55,7 @@ class Snake:
         else:
             self.direction = dir
 
-    def alive(self):
 
-        if self.check_alive:
-            for m in range(len(self.head)):
-                if self.head[m] > self.size[0]:
-                    self.check_alive = False
-                    return False
-                elif self.head[m] < 0:
-                    self.check_alive = False
-                    return False
-            return True
 
     def draw(self):
 
@@ -97,7 +87,7 @@ class Food:
         f = self.location
 
         if self.location is not None:
-            pygame.draw.circle(self.surface, WHITE, (f[0]+5, f[1]+5), 4, 1)
+            pygame.draw.circle(self.surface, WHITE, (f[0]+5, f[1]+5), 4, 3)
 
 def gameover(surface, snake_list):
 
@@ -105,7 +95,7 @@ def gameover(surface, snake_list):
     player2 = snake_list[1]
     font = pygame.font.SysFont('Comic Sans MS', 20)
 
-    # check if player 1 hits the wall
+    """"# check if player 1 hits the wall
     if not player1.alive():
         text = font.render('Player 2 won the game!', False, RED)
         surface.blit(text, (100, 200))
@@ -115,7 +105,7 @@ def gameover(surface, snake_list):
     if not player2.alive():
         text = font.render('Player 1 won the game!', False, RED)
         surface.blit(text, (100, 200))
-        return True
+        return True"""
 
     # check if either one hits others body
     if player1.length > 1 and player2.length > 1:
@@ -153,6 +143,14 @@ def gameover(surface, snake_list):
 
     return False
 
+def restart():
+
+    snake1 = Snake(surface, SIZE, WHITE)
+    snake2 = Snake(surface, SIZE, GREEN)
+    snake = [snake1, snake2]
+    food = Food(surface, snake)
+    return snake1, snake2, snake, food
+
 if __name__ == '__main__':
 
         pygame.init()
@@ -170,8 +168,48 @@ if __name__ == '__main__':
         food = Food(surface, snake)
         counter = 0
         mytext = pygame.font.SysFont('Comic Sans MS', 20)
+        ended = False
 
         while not done:
+
+            if ended:
+                # wait for the winner announcement
+                pygame.time.wait(800)
+
+                # restarting texts
+                surface.fill((0,0,0))
+                restarting = mytext.render('Restarting in...', False, RED)
+                surface.blit(restarting, (100, 200))
+                screen.blit(surface, (0,0))
+                pygame.display.flip()
+                pygame.time.wait(800)
+
+                surface.fill((0,0,0))
+                Three = mytext.render('3', False, RED)
+                surface.blit(Three, (200, 200))
+                screen.blit(surface, (0,0))
+                pygame.display.flip()
+                pygame.time.wait(800)
+
+                surface.fill((0,0,0))
+                Two = mytext.render('2', False, RED)
+                surface.blit(Two, (200, 200))
+                screen.blit(surface, (0,0))
+                pygame.display.flip()
+                pygame.time.wait(800)
+
+                surface.fill((0,0,0))
+                One = mytext.render('1', False, RED)
+                surface.blit(One, (200, 200))
+                screen.blit(surface, (0,0))
+                pygame.display.flip()
+                pygame.time.wait(800)
+
+                surface.fill((0,0,0))
+                snake1, snake2, snake, food = restart()
+                counter = 0
+                fps = 5
+                ended = False
 
             if counter < 5:
 
@@ -233,6 +271,9 @@ if __name__ == '__main__':
                     snake2.move(food)
                     snake2.draw()
                     food.draw()
+
+                else:
+                    ended = True
 
             screen.blit(surface, (0,0))
             pygame.display.flip()
