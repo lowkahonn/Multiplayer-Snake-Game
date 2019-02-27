@@ -1,5 +1,6 @@
 # Multiplayer-Snake-Game
-It is a two-player retro snake game, which brought us a lot of memories. 
+It is an epic snake game, which has brought us a lot of memories, but I decided to give it a twist.
+I made it a two-player game so that the joy can be shared by two people!
 
 How To Play:
 Player 1 is white in colour, movement control keys are arrow keys.
