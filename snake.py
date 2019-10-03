@@ -100,7 +100,6 @@ def gameover(surface, snake_list):
         text = font.render('Player 2 won the game!', False, RED)
         surface.blit(text, (100, 200))
         return True
-
     # check if player 2 hits the wall
     if not player2.alive():
         text = font.render('Player 1 won the game!', False, RED)
